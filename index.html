@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ferma la Musica!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f4f4f4;
+    }
+    .hidden {
+      display: none;
+    }
+    h1 {
+      color: #d40000;
+      font-size: 48px;
+    }
+    p.lampeggia {
+      color: red;
+      font-weight: bold;
+      font-size: 24px;
+      animation: lampeggio 1s infinite;
+    }
+    @keyframes lampeggio {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    input, button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA INIZIALE -->
+  <div id="startScreen">
+    <h1>🎶 Ferma la Musica! 🎶</h1>
+    <button onclick="avviaMusica()">Avvia Musica</button>
+  </div>
+
+  <!-- SCHERMATA INSERIMENTO PASSWORD -->
+  <div id="main" class="hidden">
+    <p class="lampeggia">Inserisci la password per fermare la canzone:</p>
+    <input type="password" id="password" placeholder="Password" />
+    <br />
+    <button onclick="checkPassword()">Invia</button>
+  </div>
+
+  <!-- SCHERMATA SUCCESSO -->
+  <div id="success" class="hidden">
+    <h1>🎉 Complimenti! 🎉</h1>
+    <p>Avete trovato la password corretta.</p>
+  </div>
+
+  <!-- SCHERMATA ERRORE -->
+  <div id="failure" class="hidden">
+    <h1>❌ Password errata ❌</h1>
+    <button onclick="retry()">Riprova</button>
+  </div>
+
+  <!-- AUDIO PRINCIPALE -->
+  <audio id="music" loop>
+    <source src="canzone.mp3" type="audio/mp3" />
+    Il tuo browser non supporta l'audio.
+  </audio>
+
+  <!-- AUDIO SUONO ERRORE -->
+  <audio id="erroreSound">
+    <source src="errore.mp3" type="audio/mp3" />
+  </audio>
+
+  <!-- AUDIO SUONO VITTORIA -->
+  <audio id="vittoriaSound">
+    <source src="vittoria.mp3" type="audio/mp3" />
+  </audio>
+
+  <script>
+    const PASSWORD_CORRETTA = "ciaodarwin";
+
+    function avviaMusica() {
+      const audio = document.getElementById("music");
+      audio.play();
+
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+      document.getElementById("password").focus();
+    }
+
+    function checkPassword() {
+      const userInput = document.getElementById("password").value.trim();
+      const audio = document.getElementById("music");
+      const erroreSound = document.getElementById("erroreSound");
+      const vittoriaSound = document.getElementById("vittoriaSound");
+
+      if (userInput === PASSWORD_CORRETTA) {
+        // Password corretta
+        audio.pause();
+        vittoriaSound.play();
+
+        document.getElementById("main").classList.add("hidden");
+        document.getElementById("failure").classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+      } else {
+        // Password errata
+        erroreSound.play();
+
+        document.getElementById("main").classList.add("hidden");
+        document.getElementById("success").classList.add("hidden");
+        document.getElementById("failure").classList.remove("hidden");
+      }
+    }
+
+    function retry() {
+      document.getElementById("failure").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+      document.getElementById("password").value = "";
+      document.getElementById("password").focus();
+    }
+  </script>
+
+</body>
+</html>
