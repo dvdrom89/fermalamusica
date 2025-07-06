@@ -8,8 +8,8 @@ self.addEventListener('install', function (e) {
         './sfondo.jpg',
         './logo1.png',
         './logo2.png',
-        './icon192.png',
-        './icon512.png',
+        './icon-192.png',
+        './icon-512.png',
         './canzone.mp3',
         './errore.mp3',
         './vittoria.mp3'
