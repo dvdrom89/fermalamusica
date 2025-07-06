@@ -109,6 +109,11 @@
   </audio>
 
   <script>
+
+ if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registrato'));
+  }
     const PASSWORD_CORRETTA = "1300";
 
     function avviaMusica() {
