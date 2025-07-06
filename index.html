@@ -2,21 +2,24 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Ferma la Musica!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferma la Musica!</title>
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json" />
   <style>
     body {
-      background-image: url('sfondo.jpg');
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: white;
+      background-color: #5a0000; /* sfondo rosso scuro */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-      color: white;
-      margin: 0;
+    }
+
+    body.sfondo-attivo {
+      background-image: url('sfondo.jpg'); /* attivo dopo loghi */
     }
 
     .hidden {
@@ -67,7 +70,7 @@
 
     .logo {
       max-width: 80%;
-      margin-top: 100px;
+      margin: 20px;
       animation: fadeInOut 2s ease-in-out forwards;
       opacity: 0;
     }
@@ -83,7 +86,7 @@
 <body>
 
   <!-- LOGHI INIZIALI -->
-  <div id="introLogos">
+  <div id="introLogos" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #5a0000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 9999;">
     <img src="logo1.png" id="logo1" class="logo hidden" />
     <img src="logo2.png" id="logo2" class="logo hidden" />
   </div>
@@ -139,6 +142,7 @@
       const start = document.getElementById('startScreen');
 
       logo1.classList.remove('hidden');
+
       setTimeout(() => {
         logo1.classList.add('hidden');
         logo2.classList.remove('hidden');
@@ -146,10 +150,11 @@
 
       setTimeout(() => {
         logo2.classList.add('hidden');
-        intro.classList.add('hidden');
+        intro.style.display = 'none';
+        document.body.classList.add('sfondo-attivo');
         start.classList.remove('hidden');
       }, 5000);
-    }
+    };
 
     function avviaMusica() {
       document.getElementById("music").play();
@@ -189,5 +194,4 @@
 
 </body>
 </html>
-
 
