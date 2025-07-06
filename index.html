@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#000000">
   <meta charset="UTF-8" />
   <title>Ferma la Musica!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json" />
   <style>
-    body {  
+    body {
       background-image: url('sfondo.jpg');
       background-size: cover;
       background-position: center;
@@ -15,6 +16,7 @@
       text-align: center;
       padding: 40px;
       color: white;
+      margin: 0;
     }
 
     .hidden {
@@ -62,12 +64,32 @@
     button:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
+
+    .logo {
+      max-width: 80%;
+      margin-top: 100px;
+      animation: fadeInOut 2s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInOut {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- LOGHI INIZIALI -->
+  <div id="introLogos">
+    <img src="logo1.png" id="logo1" class="logo hidden" />
+    <img src="logo2.png" id="logo2" class="logo hidden" />
+  </div>
+
   <!-- SCHERMATA INIZIALE -->
-  <div id="startScreen">
+  <div id="startScreen" class="hidden">
     <h1>🎶 😈 DISCO INFERNO 😈 🎶</h1>
     <button onclick="avviaMusica()">Avvia</button>
   </div>
@@ -95,7 +117,6 @@
   <!-- AUDIO PRINCIPALE -->
   <audio id="music" loop>
     <source src="canzone.mp3" type="audio/mp3" />
-    Il tuo browser non supporta l'audio.
   </audio>
 
   <!-- AUDIO SUONO ERRORE -->
@@ -109,12 +130,26 @@
   </audio>
 
   <script>
-
- if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker registrato'));
-  }
     const PASSWORD_CORRETTA = "1300";
+
+    window.onload = function () {
+      const logo1 = document.getElementById('logo1');
+      const logo2 = document.getElementById('logo2');
+      const intro = document.getElementById('introLogos');
+      const start = document.getElementById('startScreen');
+
+      logo1.classList.remove('hidden');
+      setTimeout(() => {
+        logo1.classList.add('hidden');
+        logo2.classList.remove('hidden');
+      }, 2500);
+
+      setTimeout(() => {
+        logo2.classList.add('hidden');
+        intro.classList.add('hidden');
+        start.classList.remove('hidden');
+      }, 5000);
+    }
 
     function avviaMusica() {
       document.getElementById("music").play();
@@ -145,8 +180,14 @@
       document.getElementById("password").value = "";
       document.getElementById("password").focus();
     }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker registrato'));
+    }
   </script>
 
 </body>
 </html>
+
 
