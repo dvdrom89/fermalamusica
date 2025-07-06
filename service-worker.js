@@ -1,18 +1,18 @@
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open('disco-cache').then(function (cache) {
+    caches.open('app-cache').then(function (cache) {
       return cache.addAll([
         './',
         './index.html',
+        './manifest.json',
         './sfondo.jpg',
-        './canzone.mp3',
-        './errore.mp3',
-        './vittoria.mp3',
         './logo1.png',
         './logo2.png',
         './icon192.png',
         './icon512.png',
-        './manifest.json'
+        './canzone.mp3',
+        './errore.mp3',
+        './vittoria.mp3'
       ]);
     })
   );
@@ -25,3 +25,4 @@ self.addEventListener('fetch', function (e) {
     })
   );
 });
+
