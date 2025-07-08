@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferma la Musica!</title>
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: white;
+      background-color: #5a0000;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    body.sfondo-attivo {
+      background-image: url('sfondo.jpg');
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1 {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    p.lampeggia {
+      font-weight: bold;
+      font-size: 48px;
+      animation: lampeggio 1s infinite;
+    }
+
+    @keyframes lampeggio {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    input[type="password"] {
+      font-size: 20px;
+      padding: 10px 15px;
+      width: 250px;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 24px 48px;
+      margin: 40px;
+      border: 2px solid white;
+      border-radius: 8px;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      max-width: 100vw;
+      max-height: 100vh;
+      height: auto;
+      margin: 20px;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      p.lampeggia {
+        font-size: 20px;
+      }
+
+      input[type="password"] {
+        font-size: 18px;
+        width: 80%;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 10px 20px;
+      }
+
+      .logo {
+        max-width: 80vw;
+        max-height: 40vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGHI INIZIALI -->
+  <div id="introLogos" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #5a0000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 9999;">
+    <img src="logo1.png" id="logo1" class="logo hidden" />
+    <img src="logo2.png" id="logo2" class="logo hidden" />
+  </div>
+
+  <!-- SCHERMATA INIZIALE -->
+  <div id="startScreen" class="hidden">
+    <h1>🎶 😈 DISCO INFERNO 😈 🎶</h1>
+    <button onclick="avviaMusica()">Avvia</button>
+  </div>
+
+  <!-- SCHERMATA INSERIMENTO PASSWORD -->
+  <div id="main" class="hidden">
+    <p class="lampeggia">Inserisci la password per fermare la canzone:</p>
+    <input type="password" id="password" placeholder="Password" />
+    <br />
+    <button onclick="checkPassword()">Invia</button>
+  </div>
+
+  <!-- SCHERMATA SUCCESSO -->
+  <div id="success" class="hidden">
+    <h1>🎉 Complimenti! 🎉</h1>
+    <p>Avete trovato la password corretta.</p>
+    <h2>🔍 <strong>Nuovo Indizio</strong> 🔎</h2>
+    <p style="font-weight: bold; font-size: 3.5em; line-height: 1.6;">
+      Finita la danza, ora regna il tormento,<br>
+      scendete, salendo, là dove tace ogni suono, <br>
+      il cuore è di ghiaccio e nulla vi è di buono.<br>
+      Camminate senza sosta fino al centro <br>
+      Troverete chi per l’eterno vi è condannato dentro
+    </p>
+  </div>
+
+  <!-- SCHERMATA ERRORE -->
+  <div id="failure" class="hidden">
+    <h1>❌ Password errata ❌</h1>
+    <button onclick="retry()">Riprova</button>
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="music" loop>
+    <source src="canzone.mp3" type="audio/mp3" />
+  </audio>
+
+  <audio id="erroreSound">
+    <source src="errore.mp3" type="audio/mp3" />
+  </audio>
+
+  <audio id="vittoriaSound">
+    <source src="vittoria.mp3" type="audio/mp3" />
+  </audio>
+
+  <script>
+    const PASSWORD_CORRETTA = "1300";
+
+    window.onload = function () {
+      const logo1 = document.getElementById('logo1');
+      const logo2 = document.getElementById('logo2');
+      const intro = document.getElementById('introLogos');
+      const start = document.getElementById('startScreen');
+
+      // Mostra logo1
+      logo1.classList.remove('hidden');
+
+      // Dopo 2.5s mostra logo2
+      setTimeout(() => {
+        logo1.classList.add('hidden');
+        logo2.classList.remove('hidden');
+      }, 2500);
+
+      // Dopo 6.5s mostra schermata "Avvia"
+      setTimeout(() => {
+        logo2.classList.add('hidden');
+        intro.style.display = 'none';
+        document.body.classList.add('sfondo-attivo');
+        start.classList.remove('hidden');
+      }, 6500); // logo2 resta visibile per 4s (da 2500 a 6500)
+    };
+
+    function avviaMusica() {
+      document.getElementById("music").play();
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+      document.getElementById("password").focus();
+    }
+
+    function checkPassword() {
+      const userInput = document.getElementById("password").value.trim();
+      if (userInput === PASSWORD_CORRETTA) {
+        document.getElementById("music").pause();
+        document.getElementById("vittoriaSound").play();
+        document.getElementById("main").classList.add("hidden");
+        document.getElementById("failure").classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+      } else {
+        document.getElementById("erroreSound").play();
+        document.getElementById("main").classList.add("hidden");
+        document.getElementById("success").classList.add("hidden");
+        document.getElementById("failure").classList.remove("hidden");
+      }
+    }
+
+    function retry() {
+      document.getElementById("failure").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+      document.getElementById("password").value = "";
+      document.getElementById("password").focus();
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker registrato'));
+    }
+  </script>
+
+</body>
+</html>
